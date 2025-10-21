@@ -1,0 +1,47 @@
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+
+# === Base de datos ===
+motor==3.4.0
+beanie==1.27.0
+pymongo==4.9.1
+
+# === Validación y configuración ===
+pydantic==2.9.2
+pydantic-settings==2.4.0
+python-dotenv==1.0.1
+
+# === Autenticación y seguridad ===
+pyjwt==2.9.0
+passlib[bcrypt]==1.7.4
+bcrypt==4.2.0
+
+# === WebSockets y tiempo real ===
+websockets==13.1
+
+# === Notificaciones push (Firebase) ===
+firebase-admin==6.6.0
+
+# === Utilidades ===
+requests==2.32.3
+httpx==0.27.2
+aiofiles==24.1.0
+
+# === Testing ===
+pytest==8.3.3
+pytest-asyncio==0.23.8
+httpx==0.27.2
+
+# === Formateo, linting y estilo ===
+black==24.8.0
+isort==5.13.2
+flake8==7.1.1
+
+# === Otros útiles (según ampliaciones futuras) ===
+python-multipart==0.0.9  # Si subes archivos con multer-like behavior
+email-validator==2.2.0   # Validación de correos en Pydantic
+loguru==0.7.2            # Logging avanzado
+
+authlib
+python-jose[cryptography]
+requests

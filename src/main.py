@@ -1,13 +1,17 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
+from src.config.db import init_db
+from src.routes import users
+from src.helpers.api_responses import APIResponses
 
 
-app = FastAPI()
+app = FastAPI(title="Bussiness API")
 
-# @app.on_event("startup")
-# async def on_startup():
-#     with next(get_db()) as session:
-#         seed_subscription_plans(session)
+@app.on_event("startup")
+async def start_db():
+    await init_db()
+
 if __name__ == "__main__":
     import uvicorn
     import os
@@ -15,16 +19,16 @@ if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     uvicorn.run("main:app", host="0.0.0.0", port=port)
 
-# @app.exception_handler(APIResponses)
-# async def api_error_handler(request: Request, exc: APIResponses):
-#     return JSONResponse(
-#         status_code=exc.status_code,
-#         content={
-#             "message": exc.message,
-#             "status_text": APIResponses.switch.get(exc.status_code, "Unknown"),
-#             "path": request.url.path,
-#         },
-#     )
+@app.exception_handler(APIResponses)
+async def api_error_handler(request: Request, exc: APIResponses):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "message": exc.message,
+            "status_text": APIResponses.switch.get(exc.status_code, "Unknown"),
+            "path": request.url.path,
+        },
+    )
 
 # create_db_and_tables()
 
@@ -37,4 +41,4 @@ app.add_middleware(
     expose_headers=["*"], 
 )
 
-# app.include_router(users.router) # aca es donde se agregan la rutas
+app.include_router(users.router) # aca es donde se agregan la rutas

@@ -4,7 +4,8 @@ uvicorn[standard]==0.30.6
 # === Base de datos ===
 motor==3.4.0
 beanie==1.27.0
-pymongo==4.9.1
+pymongo==4.8.0
+# pymongo==4.9.1
 
 # === Validación y configuración ===
 pydantic==2.9.2
@@ -14,7 +15,9 @@ python-dotenv==1.0.1
 # === Autenticación y seguridad ===
 pyjwt==2.9.0
 passlib[bcrypt]==1.7.4
-bcrypt==4.2.0
+# passlib[bcrypt]==1.7.4
+bcrypt==4.0.1
+# bcrypt==4.2.0
 
 # === WebSockets y tiempo real ===
 websockets==13.1

@@ -5,6 +5,7 @@ from datetime import datetime
 from enum import Enum
 from bson import ObjectId
 from src.models.cart import Cart
+from beanie import PydanticObjectId
 
 class RoleEnum(str, Enum):
     ADMIN = "admin"
@@ -18,14 +19,18 @@ class Users(Document):
     google_id: Optional[str] = None
     role: RoleEnum = RoleEnum.CLIENT
     created_at: datetime = Field(default_factory=datetime.utcnow)
-    cart_id: Optional[ObjectId] = None
+    cart_id: Optional[PydanticObjectId] = None
 
     model_config = {
         "arbitrary_types_allowed": True
+        
     }
 
     class Settings:
         name = "users"
+        bson_encoders = {
+            ObjectId: str  # Convierte ObjectId a string automáticamente
+        }
 
     async def create_cart(self):
         """Crea un carrito automáticamente cuando se registra el usuario"""

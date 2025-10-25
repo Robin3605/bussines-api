@@ -17,11 +17,16 @@ class UserUpdate(BaseModel):
     password: Optional[str] = None
 
 class UserResponse(BaseModel):
-    id: str = Field(default=None, alias="_id")  # 👈 Acepta tanto id como _id
+    id: Optional[str] = Field(default=None, alias="_id")
     username: str
     email: EmailStr
     role: RoleEnum
+    cart_id: Optional[str] = None
     created_at: datetime
+
+    # model_config = {
+    #     "populate_by_name": True
+    # }
 
     class Config:
         allow_population_by_field_name = True

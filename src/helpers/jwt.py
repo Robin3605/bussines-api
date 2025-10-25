@@ -11,8 +11,17 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) + (expires_delta or timedelta(minutes=settings.access_token_expire_minutes))
+
+    # 🔥 Convierte cualquier valor que no sea serializable (ObjectId, datetime, etc.)
+    for key, value in to_encode.items():
+        if not isinstance(value, (str, int, float, bool, type(None))):
+            to_encode[key] = str(value)
+
+    expire = datetime.now(timezone.utc) + (
+        expires_delta or timedelta(minutes=settings.access_token_expire_minutes)
+    )
     to_encode.update({"exp": expire})
+
     return jwt.encode(to_encode, settings.secret_key, algorithm=settings.algorithm)
 
 

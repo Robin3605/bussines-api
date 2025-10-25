@@ -1,22 +1,32 @@
 from src.models.users import Users
-from src.schemas.users import UserCreate, UserUpdate
-from passlib.hash import bcrypt
+from src.schemas.users import  UserUpdate
 from src.helpers.api_responses import DBError
-from fastapi import HTTPException
-import traceback
+
+
 
 class UserRepository:
     @staticmethod
+    def serialize_user(user):
+        data = user.dict()
+        data["_id"] = str(user.id)
+        data["cart_id"] = str(user.cart_id) if user.cart_id else None
+        data.pop("id", None)
+        return data
+
+    @staticmethod
     async def create_user(user: Users):
         try:
-            await user.create()
-            await user.create_cart()
+            saved_user = await user.insert()
+            await saved_user.create_cart()
 
-        # Convierte ObjectId a string y usa alias correcto
-            user_dict = user.dict()
-            user_dict["_id"] = str(user_dict.get("id"))  # 👈 importante
+            print("🧠 ID real:", saved_user.id)
+
+            user_dict = saved_user.dict()
+            user_dict["_id"] = str(saved_user.id) if saved_user.id else None
+            user_dict["cart_id"] = str(saved_user.cart_id) if saved_user.cart_id else None
             user_dict.pop("id", None)
 
+            print("✅ user_dict final:", user_dict)
             return user_dict
         except Exception as e:
             print("❌ Error exacto al crear usuario:", e)

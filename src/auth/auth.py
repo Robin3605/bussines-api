@@ -27,7 +27,7 @@ async def login( email: str, password: str, response: Response = None):
     # Crear token (usamos email como identificador)
     access_token = create_access_token(data={
         "sub": user.email,
-        "user_id": user.id,
+        "user_id": str(user.id),
         "is_admin": user.role
     })
     

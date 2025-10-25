@@ -2,8 +2,9 @@ from fastapi import APIRouter, Body, Response, Request
 from src.auth.google import login_with_google
 from src.auth.auth import login, logout
 from src.schemas.users import  UserResponse, Token, User_login
-from src.auth.auth import get_current_user
+from src.helpers.jwt import get_current_user
 from fastapi import HTTPException
+from src.repository.users import UserRepository
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -34,4 +35,4 @@ async def get_current_user_profile(
     user = await get_current_user(request)
     if not user:
         raise HTTPException(status_code=401, detail="Not authenticated")
-    return user
+    return UserRepository.serialize_user(user)

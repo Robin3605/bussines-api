@@ -2,7 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from src.config.db import init_db
-from src.routes import users, auth, products
+from src.routes import users, auth, products, cart
 from src.helpers.api_responses import APIResponses
 from src.config.cloudinary import cloudinary
 
@@ -45,3 +45,4 @@ app.add_middleware(
 app.include_router(users.router) # aca es donde se agregan la rutas
 app.include_router(auth.router)
 app.include_router(products.router)
+app.include_router(cart.router)

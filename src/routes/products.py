@@ -46,7 +46,7 @@ async def register_product(
 async def get_all_products_in_db():
     try:
         products = await ProductController.get_all_products()
-        return [ProductRepository.serialize_user(product) for product in products]
+        return [ProductRepository.serialize_product(product) for product in products]
     except Exception as e:
         print("❌ Error exacto al crear product:", e)
         raise HTTPException(status_code=500, detail=f"Error creando product: {e}")
@@ -55,7 +55,7 @@ async def get_all_products_in_db():
 async def get_one_product_by_id(id: str):
     try:
         product = await ProductController.get_product_by_id(id)
-        return ProductRepository.serialize_user(product)
+        return ProductRepository.serialize_product(product)
     except Exception as e:
         print("❌ Error exacto al crear product:", e)
         raise HTTPException(status_code=500, detail=f"Error creando product: {e}")
@@ -64,7 +64,7 @@ async def get_one_product_by_id(id: str):
 async def update_one_product(id: str, product_data: ProductUpdate):
     try:
         product = await ProductController.update_product(id, product_data)
-        return ProductRepository.serialize_user(product)
+        return ProductRepository.serialize_product(product)
     except Exception as e:
         print("❌ Error exacto al crear product:", e)
         raise HTTPException(status_code=500, detail=f"Error creando product: {e}")

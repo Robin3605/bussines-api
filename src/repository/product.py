@@ -1,12 +1,12 @@
 from src.models.products import Products
 from src.schemas.products import  ProductUpdate
 from src.helpers.api_responses import DBError
-
+from bson import ObjectId
 
 
 class ProductRepository:
     @staticmethod
-    def serialize_user(product):
+    def serialize_product(product):
         data = product.dict()
         data["_id"] = str(product.id)
         data.pop("id", None)
@@ -33,7 +33,11 @@ class ProductRepository:
     @staticmethod
     async def get_by_id(id: str):
         try:
-            return await Products.get(id)
+            id = id.strip()
+            if not ObjectId.is_valid(id):
+                raise DBError("Invalid ObjectId format")
+            product = await Products.get(ObjectId(id))
+            return product
         except Exception as e:
             raise DBError(f"Error fetching user by id: {e}")
 

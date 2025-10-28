@@ -57,8 +57,8 @@ async def get_one_product_by_id(id: str):
         product = await ProductController.get_product_by_id(id)
         return ProductRepository.serialize_product(product)
     except Exception as e:
-        print("❌ Error exacto al crear product:", e)
-        raise HTTPException(status_code=500, detail=f"Error creando product: {e}")
+        print("❌ Error exacto al obtener un product:", e)
+        raise HTTPException(status_code=500, detail=f"Error obteniendo un product: {e}")
 
 @router.put("/{id}", response_model=ProductResponse)
 async def update_one_product(id: str, product_data: ProductUpdate):

@@ -7,6 +7,7 @@ from src.helpers.api_responses import APIResponses
 from src.config.cloudinary import cloudinary
 
 
+
 app = FastAPI(title="Bussiness API")
 
 @app.on_event("startup")

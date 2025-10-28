@@ -6,10 +6,14 @@ from src.models.cart import Cart
 from src.models.products import Products
 
 client = AsyncIOMotorClient(settings.db_link)
-db = client.get_default_database()
+db = client.bussines
 
 async def init_db():
+    print(f"INICIALIZANDO BEANIE EN BASE DE DATOS: {db.name}")
+    print(f"📦 Modelos a inicializar: {[Users, Products, Cart]}")
+    
     await init_beanie(
         database=db,
-        document_models=[Users, Cart, Products]
+        document_models=[Users, Products, Cart]
     )
+    

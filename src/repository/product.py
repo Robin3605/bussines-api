@@ -1,8 +1,10 @@
 from src.models.products import Products
 from src.schemas.products import  ProductUpdate
-from src.helpers.api_responses import DBError
+from src.helpers.api_responses import DBError, ConflictError
 from bson import ObjectId
-
+from beanie import PydanticObjectId
+import traceback
+from src.config.db import db
 
 class ProductRepository:
     @staticmethod
@@ -33,13 +35,15 @@ class ProductRepository:
     @staticmethod
     async def get_by_id(id: str):
         try:
-            id = id.strip()
-            if not ObjectId.is_valid(id):
-                raise DBError("Invalid ObjectId format")
-            product = await Products.get(ObjectId(id))
+            object_id = ObjectId(id)
+
+            product3 = await db.products.find_one({"_id": object_id})
+            product = Products(**product3)
+            
             return product
         except Exception as e:
-            raise DBError(f"Error fetching user by id: {e}")
+            print(f"❌ [DEBUG ERROR] Error completo: {traceback.format_exc()}")
+            raise DBError(f"Error fetching product by id: {e}")
 
     @staticmethod
     async def get_all():
@@ -51,7 +55,7 @@ class ProductRepository:
     @staticmethod
     async def update_one(id: str, data: ProductUpdate):
         try:
-            product = await Products.get(id)
+            product = await ProductRepository.get_by_id(id)
             if not product:
                 return None
 
@@ -67,7 +71,7 @@ class ProductRepository:
     @staticmethod
     async def delete_one(id: str):
         try:
-            product = await Products.get(id)
+            product = await ProductRepository.get_by_id(id)
             if product:
                 await product.delete()
                 return True

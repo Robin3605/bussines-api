@@ -1,5 +1,6 @@
 from src.repository.cart import CartRepository
 from src.helpers.api_responses import APIResponses, ConflictError
+from src.schemas.cart import CartResponse
 
 class CartController:
 
@@ -9,7 +10,11 @@ class CartController:
             cart = await CartRepository.get_cart_by_user_id(user_id)
             if not cart:
                 cart = await CartRepository.create_cart(user_id)
-            return cart
+
+            cart_dict = cart.dict()
+            cart_dict["_id"] = str(cart.id)
+            cart_dict["user_id"] = str(cart.user_id)
+            return CartResponse(**cart_dict)
         except Exception as e:
             raise APIResponses(500, f"Error obteniendo carrito: {e}")
 

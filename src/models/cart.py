@@ -3,6 +3,7 @@ from pydantic import Field, BaseModel
 from bson import ObjectId
 from typing import List, Optional
 from datetime import datetime
+from beanie import PydanticObjectId
 
 class CartItem(BaseModel):
     product_id: str
@@ -10,7 +11,7 @@ class CartItem(BaseModel):
 
 
 class Cart(Document):
-    user_id: ObjectId
+    user_id: Optional[PydanticObjectId] = None
     items: List[CartItem] = []  # 👈 usa la clase CartItem, no dict
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
@@ -20,3 +21,6 @@ class Cart(Document):
 
     class Settings:
         name = "carts"
+        bson_encoders = {
+            ObjectId: str  # Convierte ObjectId a string automáticamente
+        }

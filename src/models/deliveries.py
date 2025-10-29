@@ -7,7 +7,8 @@ from datetime import datetime
 
 class Delivery(Document):
     order_id: str
-    address: str
+    deliver_name: str
+    # address: str
     tracking_number: Optional[str]
     status: str = "preparing"  # preparing, in_transit, delivered
     estimated_date: Optional[datetime]

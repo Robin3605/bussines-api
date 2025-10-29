@@ -2,12 +2,20 @@ from typing import Optional
 from src.models.cart import Cart, CartItem
 from src.models.products import Products
 from src.helpers.api_responses import DBError
+from bson import ObjectId
 
 class CartRepository:
+    @staticmethod
+    def serialize_cart(cart):
+        data = cart.dict()
+        data["_id"] = str(cart.id)
+        data["user_id"] = str(cart.user_id)
+        data.pop("id", None)
+        return data
 
     @staticmethod
     async def get_cart_by_user_id(user_id: str) -> Optional[Cart]:
-        return await Cart.find_one(Cart.user_id == user_id)
+        return await Cart.find_one(Cart.user_id ==  ObjectId(user_id))
 
     @staticmethod
     async def create_cart(user_id: str) -> Cart:

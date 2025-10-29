@@ -1,5 +1,6 @@
-from typing import List
-from pydantic import BaseModel
+from typing import List, Optional
+from pydantic import BaseModel, Field
+from bson import ObjectId
 
 class CartItemSchema(BaseModel):
     product_id: str
@@ -13,9 +14,16 @@ class AddItemRequest(BaseModel):
     quantity: int
 
 class CartResponse(BaseModel):
-    id: str
+    id: Optional[str] = Field(default=None, alias="_id")
     user_id: str
     items: List[CartItemSchema]
 
     class Config:
-        from_attributes = True
+        allow_population_by_field_name = True
+        json_encoders = {
+            ObjectId: str
+        }
+
+    # class Config:
+    #     populate_by_name = True
+    #     from_attributes = True

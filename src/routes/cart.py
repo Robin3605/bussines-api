@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from src.controllers.cart import CartController
 from src.schemas.cart import AddItemRequest, CartResponse
 from src.helpers.jwt import get_current_user  # si tienes auth
+from src.repository.cart import CartRepository
 
 router = APIRouter(prefix="/cart", tags=["Cart"])
 
@@ -16,7 +17,7 @@ async def add_item_to_cart(
     current_user=Depends(get_current_user)
 ):
     cart = await CartController.add_item(current_user.id, data.product_id, data.quantity)
-    return cart
+    return CartRepository.serialize_cart(cart)
 
 @router.delete("/remove/{product_id}", response_model=CartResponse)
 async def remove_item_from_cart(product_id: str, current_user=Depends(get_current_user)):

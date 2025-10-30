@@ -17,7 +17,7 @@ async def add_item_to_cart(
     current_user=Depends(get_current_user)
 ):
     cart = await CartController.add_item(current_user.id, data.product_id, data.quantity)
-    return CartRepository.serialize_cart(cart)
+    return cart
 
 @router.delete("/remove/{product_id}", response_model=CartResponse)
 async def remove_item_from_cart(product_id: str, current_user=Depends(get_current_user)):

@@ -35,7 +35,8 @@ class Users(Document):
     async def create_cart(self):
         """Crea un carrito automáticamente cuando se registra el usuario"""
         # from src.models.carts import Cart
-        cart = Cart(user_id=self.id, items=[])
+        # cart = Cart(user_id=self.id, items=[])
+        cart = Cart(user_id=self.id)
         await cart.insert()
         self.cart_id = cart.id
         await self.save()

@@ -6,13 +6,13 @@ from datetime import datetime
 from beanie import PydanticObjectId
 
 class CartItem(BaseModel):
-    product_id: str
+    product_id: PydanticObjectId
     quantity: int = Field(default=1, ge=1)  # 👈 mínimo 1
 
 
 class Cart(Document):
     user_id: Optional[PydanticObjectId] = None
-    items: List[CartItem] = []  # 👈 usa la clase CartItem, no dict
+    items: List[CartItem] = Field(default_factory=list)  # 👈 usa la clase CartItem, no dict
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     model_config = {

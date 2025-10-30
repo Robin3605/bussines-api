@@ -16,7 +16,7 @@ class AddItemRequest(BaseModel):
 class CartResponse(BaseModel):
     id: Optional[str] = Field(default=None, alias="_id")
     user_id: str
-    items: List[CartItemSchema]
+    items: List[CartItemSchema] = Field(default_factory=list)
 
     class Config:
         allow_population_by_field_name = True

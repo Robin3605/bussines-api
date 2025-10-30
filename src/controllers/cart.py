@@ -11,30 +11,35 @@ class CartController:
             if not cart:
                 cart = await CartRepository.create_cart(user_id)
 
-            cart_dict = cart.dict()
-            cart_dict["_id"] = str(cart.id)
-            cart_dict["user_id"] = str(cart.user_id)
-            return CartResponse(**cart_dict)
+            # Serializa aquí (strings en product_id / user_id)
+            serialized = CartRepository.serialize_cart(cart)
+            return CartResponse(**serialized)
         except Exception as e:
             raise APIResponses(500, f"Error obteniendo carrito: {e}")
 
     @staticmethod
     async def add_item(user_id: str, product_id: str, quantity: int):
         try:
-            return await CartRepository.add_item_to_cart(user_id, product_id, quantity)
+            cart = await CartRepository.add_item_to_cart(user_id, product_id, quantity)
+            serialized = CartRepository.serialize_cart(cart)
+            return CartResponse(**serialized)
         except Exception as e:
             raise APIResponses(500, f"Error agregando producto al carrito: {e}")
 
     @staticmethod
     async def remove_item(user_id: str, product_id: str):
         try:
-            return await CartRepository.remove_item_from_cart(user_id, product_id)
+            cart = await CartRepository.remove_item_from_cart(user_id, product_id)
+            serialized = CartRepository.serialize_cart(cart)
+            return CartResponse(**serialized)
         except Exception as e:
             raise APIResponses(500, f"Error eliminando producto del carrito: {e}")
 
     @staticmethod
     async def clear(user_id: str):
         try:
-            return await CartRepository.clear_cart(user_id)
+            cart = await CartRepository.clear_cart(user_id)
+            serialized = CartRepository.serialize_cart(cart)
+            return CartResponse(**serialized)
         except Exception as e:
             raise APIResponses(500, f"Error limpiando carrito: {e}")
